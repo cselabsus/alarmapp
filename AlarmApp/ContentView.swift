@@ -9,12 +9,15 @@ struct ContentView: View {
     var body: some View {
         VStack(spacing: 28) {
             Spacer()
-            Image(systemName: "alarm.fill")
+            Image(systemName: SunriseTheme.symbol)
                 .font(.system(size: 48))
-                .foregroundStyle(.orange)
+                .foregroundStyle(SunriseTheme.tint)
                 .accessibilityHidden(true)
-            Text("Alarm")
+            Text("Sunrise")
                 .font(.largeTitle.bold())
+            Text(SunriseTheme.alarmTitle)
+                .font(.title3)
+                .foregroundStyle(SunriseTheme.tint)
 
             DatePicker("Alarm time", selection: $time, displayedComponents: .hourAndMinute)
                 .datePickerStyle(.wheel)
@@ -33,7 +36,7 @@ struct ContentView: View {
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             } else {
-                Text("One alarm. Your sound.")
+                Text("A new day. Your sound.")
                     .foregroundStyle(.secondary)
             }
 
@@ -50,11 +53,15 @@ struct ContentView: View {
                     .padding(.vertical, 12)
             }
             .buttonStyle(.borderedProminent)
-            .tint(.orange)
+            .tint(SunriseTheme.tint)
+            .foregroundStyle(.black)
             .disabled(store.isBusy || !store.hasLoaded)
             Spacer()
         }
         .padding(28)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(SunriseTheme.background.ignoresSafeArea())
+        .preferredColorScheme(.dark)
         .task { await store.observe() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active && !store.isBusy { store.refresh() }

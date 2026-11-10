@@ -1,9 +1,21 @@
 import AlarmKit
+import AppIntents
 import AVFoundation
 import Observation
 import SwiftUI
 
 struct AlarmInfo: AlarmMetadata {}
+
+struct OpenAlarmAppIntent: LiveActivityIntent {
+    static var title: LocalizedStringResource = "Open alarm app"
+    static var supportedModes: IntentModes { .foreground(.immediate) }
+
+    func perform() async throws -> some IntentResult {
+        // The app has one screen. Foreground activation refreshes its alarm state.
+        // AlarmKit remains the sole owner of alarm playback and lifecycle.
+        .result()
+    }
+}
 
 @MainActor
 @Observable
@@ -79,17 +91,24 @@ final class AlarmStore {
                 return
             }
             let alert = AlarmPresentation.Alert(
-                title: "Alarm",
-                stopButton: AlarmButton(text: "Stop", textColor: .white, systemImageName: "stop.fill")
+                title: SunriseTheme.alarmTitle,
+                stopButton: AlarmButton(text: "Stop", textColor: .white, systemImageName: "stop.fill"),
+                secondaryButton: AlarmButton(
+                    text: SunriseTheme.openButtonTitle,
+                    textColor: .white,
+                    systemImageName: SunriseTheme.symbol
+                ),
+                secondaryButtonBehavior: .custom
             )
             let attributes = AlarmAttributes(
                 presentation: AlarmPresentation(alert: alert),
                 metadata: AlarmInfo(),
-                tintColor: .orange
+                tintColor: SunriseTheme.tint
             )
             let configuration = AlarmManager.AlarmConfiguration.alarm(
                 schedule: .fixed(date),
                 attributes: attributes,
+                secondaryIntent: OpenAlarmAppIntent(),
                 sound: .named("\(filename).wav")
             )
             activeAlarm = try await manager.schedule(id: alarmID, configuration: configuration)

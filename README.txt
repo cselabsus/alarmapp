@@ -23,6 +23,14 @@ The included WAVs are generated sample tones, not your custom recordings.
 BEHAVIOR
 One one-time alarm at a time. A time already passed means the next occurrence.
 Cancel the active alarm before changing its time or sound.
+The Sunrise theme uses the alarm title "Rise & shine", an "Open Sunrise"
+button, the sunrise.fill SF Symbol, and a warm orange tint. iOS chooses which
+elements to display in each system presentation; symbols may appear in the
+Dynamic Island rather than the full-screen alarm. The app screen uses the
+same sun and tint over a plum-to-dawn gradient. That gradient is in-app only.
+The ringing alarm's Open Sunrise button brings up the app's screen.
+iOS handles any required unlock. After installing this update, cancel and set
+any existing alarm again so its system configuration includes the new button.
 AlarmKit owns scheduling, playback, and the system Stop button, including on
 the locked phone. The app reads current alarms from the system on launch and
 foreground entry. No background audio loop or competing app timer is used.
@@ -32,6 +40,8 @@ cannot create concurrent scheduling requests.
 CHECK ON YOUR IPHONE
 Set an alarm one minute ahead, lock the phone, and verify Sound 1 plays.
 Stop it using the system control; repeat with Sound 2.
+Set another alarm, lock the phone, and tap Open Sunrise when it rings. Verify the
+app opens after any required unlock and displays the current system state.
 Set another alarm, close/reopen the app, and verify it still shows as set.
 Cancel it and verify it does not ring. Also try denying alarm permission.
 Confirm your replacement files work on the actual phone before relying on them.
