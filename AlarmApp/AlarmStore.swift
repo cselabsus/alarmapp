@@ -6,6 +6,28 @@ import SwiftUI
 
 struct AlarmInfo: AlarmMetadata {}
 
+enum AlarmSound: Int, CaseIterable {
+    case sound1 = 1
+    case sound2 = 2
+    case sing = 3
+
+    var title: String {
+        switch self {
+        case .sound1: "Sound 1"
+        case .sound2: "Sound 2"
+        case .sing: "Sing"
+        }
+    }
+
+    var filename: String {
+        switch self {
+        case .sound1: "alarm1"
+        case .sound2: "alarm2"
+        case .sing: "sing"
+        }
+    }
+}
+
 struct OpenAlarmAppIntent: LiveActivityIntent {
     static var title: LocalizedStringResource = "Open alarm app"
     static var supportedModes: IntentModes { .foreground(.immediate) }
@@ -71,7 +93,11 @@ final class AlarmStore {
                 errorMessage = "Allow alarms for AlarmApp in Settings, then try again."
                 return
             }
-            let filename = "alarm\(sound)"
+            guard let selectedSound = AlarmSound(rawValue: sound) else {
+                errorMessage = "Choose an available alarm sound."
+                return
+            }
+            let filename = selectedSound.filename
             guard let url = Bundle.main.url(forResource: filename, withExtension: "wav") else {
                 errorMessage = "Missing \(filename).wav. Add it to the app’s Sounds folder and rebuild."
                 return

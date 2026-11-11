@@ -25,8 +25,9 @@ struct ContentView: View {
                 .disabled(store.activeAlarm != nil || store.isBusy)
 
             Picker("Alarm sound", selection: $sound) {
-                Text("Sound 1").tag(1)
-                Text("Sound 2").tag(2)
+                ForEach(AlarmSound.allCases, id: \.rawValue) { option in
+                    Text(option.title).tag(option.rawValue)
+                }
             }
             .pickerStyle(.segmented)
             .disabled(store.activeAlarm != nil || store.isBusy)
